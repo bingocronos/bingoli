@@ -64,7 +64,7 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      font-size: 20px;
+      font-size: 23px;
       color: white;
     }
     .celula[contenteditable] {
@@ -166,7 +166,7 @@
   const celulas = document.querySelectorAll('.celula');
 
   function resizeText(element) {
-    let fontSize = 20;
+    let fontSize = 23;
     const minFontSize = 10;
     element.style.fontSize = fontSize + 'px';
     while (element.scrollHeight > element.clientHeight && fontSize > minFontSize) {
@@ -237,7 +237,7 @@ function baixarCartela() {
     celulas.forEach((celula, index) => {
       celula.innerText = textosPadrao[index] || "";
       celula.classList.remove('marcada');
-      celula.style.fontSize = '28px';
+      celula.style.fontSize = '23px';
     });
     salvarLocalmente();
   }
