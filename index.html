@@ -9,6 +9,7 @@
     body {
       font-family: Arial, sans-serif;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
@@ -20,18 +21,11 @@
     }
     .main-container {
       display: flex;
-      justify-content: center;
+      flex-direction: row;
+      gap: 40px;
       align-items: center;
-      max-height: 100vh;
-    }
-    #container-cartela {
-      display: flex;
       justify-content: center;
-      align-items: center;
-      max-height: 100vh;
-      overflow: hidden;
-      transform-origin: top center;
-      flex-grow: 1;
+      flex-wrap: wrap;
     }
     .fundo-cartela {
       width: 595px;
@@ -40,22 +34,22 @@
       background-size: cover;
       background-position: center;
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+      flex-direction: column;  /* Ajustado para garantir que as células e pontuação fiquem na parte inferior */
+      justify-content: flex-end;  /* Alinha tudo no fundo */
       align-items: center;
-      padding: 20px 40px;
+      padding: 20px 40px;  /* Ajuste no padding */
       box-sizing: border-box;
     }
     .pontuacao {
       font-family: 'Tektur', sans-serif;
       font-size: 26px;
       font-weight: bold;
-      margin-bottom: 10px;
+      margin-bottom: 10px; /* Ajuste para a pontuação não ficar grudada */
       margin-right: 50px;
-      text-align: right;
-      width: 100%;
+      text-align: right;  /* Alinhado à direita */
+      width: 100%; /* Faz com que a pontuação ocupe toda a largura */
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-end;  /* Alinha a pontuação à direita */
     }
     .cartela {
       display: grid;
@@ -95,8 +89,8 @@
     .direita {
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      margin-left: 30px;
+      align-items: center;
+      justify-content: center;
     }
     .botoes {
       display: flex;
@@ -126,7 +120,7 @@
     .instrucoes {
       max-width: 260px;
       font-family: 'Tektur', sans-serif;
-      font-size: 30px;
+      font-size: 25px;
       color: #FFFFFF;
       font-weight: bold;
       text-align: center;
@@ -141,20 +135,20 @@
 </head>
 <body>
   <div class="main-container">
-    <div id="container-cartela">
-      <div class="fundo-cartela" id="fundo">
-        <div class="pontuacao" id="pontuacao" style="font-size: 26px; font-weight: bold; color: #FF2A2B;">Pontos: 0</div>
-        <div id="cartela" class="cartela">
-          <div class="celula" contenteditable="true"></div>
-          <div class="celula" contenteditable="true"></div>
-          <div class="celula" contenteditable="true"></div>
-          <div class="celula" contenteditable="true"></div>
-          <div class="celula" contenteditable="true"></div>
-          <div class="celula" contenteditable="true"></div>
-          <div class="celula" contenteditable="true"></div>
-          <div class="celula" contenteditable="true"></div>
-          <div class="celula" contenteditable="true"></div>
-        </div>
+    <div class="fundo-cartela" id="fundo">
+      <!-- A pontuação agora está no topo da cartela, alinhada à direita -->
+      <div class="pontuacao" id="pontuacao" style="font-size: 26px; font-weight: bold; color: #FF2A2B;">Pontos: 0</div>
+
+      <div id="cartela" class="cartela">
+        <div class="celula" contenteditable="true"></div>
+        <div class="celula" contenteditable="true"></div>
+        <div class="celula" contenteditable="true"></div>
+        <div class="celula" contenteditable="true"></div>
+        <div class="celula" contenteditable="true"></div>
+        <div class="celula" contenteditable="true"></div>
+        <div class="celula" contenteditable="true"></div>
+        <div class="celula" contenteditable="true"></div>
+        <div class="celula" contenteditable="true"></div>
       </div>
     </div>
 
@@ -163,15 +157,13 @@
         <button onclick="baixarCartela()">Salvar Imagem</button>
         <button onclick="resetarCartela()">Resetar Cartela</button>
       </div>
-
-      <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
-        <div class="instrucoes">
-          <p>- Personalize como quiser a cartela</p>
-          <p>- Dê 2 cliques para marcar e desmarcar</p>
-          <p>- Aperte o botão de resetar pra voltar a cartela original</p>
-        </div>
-
-        <div class="instrucoes" style="max-width: 280px;">
+	<div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
+      <div class="instrucoes">
+        <p>- Personalize como quiser a cartela</p>
+        <p>- Dê 2 cliques para marcar e desmarcar</p>
+        <p>- Aperte o botão de resetar pra voltar a cartela original</p>
+      </div>
+<div class="instrucoes" style="max-width: 280px;">
           <p style="font-size: 24px; color: #FF2A2B; margin-bottom: 10px;">Pontuação:</p>
           <div style="font-size: 20px; color: #FFFFFF; text-align: left; font-weight: bold;">
             <p>Um quadrado: <span style="color: #FF2A2B;">+1 ponto</span></p>
@@ -179,10 +171,9 @@
             <p>Diagonal: <span style="color: #FF2A2B;">+10 pontos</span></p>
           </div>
         </div>
-      </div>
     </div>
-
   </div>
+</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
@@ -202,46 +193,50 @@
   const pontuacaoEl = document.getElementById('pontuacao');
 
   function atualizarPontuacao() {
-    let pontos = 0;
-    const marcadas = Array.from(celulas).map(c => c.classList.contains('marcada'));
-    const usadas = new Set();
+  let pontos = 0;
+  const marcadas = Array.from(celulas).map(c => c.classList.contains('marcada'));
+  const usadas = new Set(); // para armazenar os índices das células que fazem parte de combinações premiadas
 
-    for (let i = 0; i < 3; i++) {
-      const linhaIndices = [i * 3, i * 3 + 1, i * 3 + 2];
-      const colunaIndices = [i, i + 3, i + 6];
+  // Linhas e colunas (5 pontos)
+  for (let i = 0; i < 3; i++) {
+    const linhaIndices = [i * 3, i * 3 + 1, i * 3 + 2];
+    const colunaIndices = [i, i + 3, i + 6];
 
-      if (linhaIndices.every(index => marcadas[index])) {
-        pontos += 5;
-        linhaIndices.forEach(index => usadas.add(index));
-      }
-
-      if (colunaIndices.every(index => marcadas[index])) {
-        pontos += 5;
-        colunaIndices.forEach(index => usadas.add(index));
-      }
+    if (linhaIndices.every(index => marcadas[index])) {
+      pontos += 5;
+      linhaIndices.forEach(index => usadas.add(index));
     }
 
-    const diag1 = [0, 4, 8];
-    const diag2 = [2, 4, 6];
-
-    if (diag1.every(index => marcadas[index])) {
-      pontos += 10;
-      diag1.forEach(index => usadas.add(index));
+    if (colunaIndices.every(index => marcadas[index])) {
+      pontos += 5;
+      colunaIndices.forEach(index => usadas.add(index));
     }
-
-    if (diag2.every(index => marcadas[index])) {
-      pontos += 10;
-      diag2.forEach(index => usadas.add(index));
-    }
-
-    marcadas.forEach((marcada, index) => {
-      if (marcada && !usadas.has(index)) {
-        pontos += 1;
-      }
-    });
-
-    pontuacaoEl.textContent = `Pontos: ${pontos}`;
   }
+
+  // Diagonais (10 pontos)
+  const diag1 = [0, 4, 8];
+  const diag2 = [2, 4, 6];
+
+  if (diag1.every(index => marcadas[index])) {
+    pontos += 10;
+    diag1.forEach(index => usadas.add(index));
+  }
+
+  if (diag2.every(index => marcadas[index])) {
+    pontos += 10;
+    diag2.forEach(index => usadas.add(index));
+  }
+
+  // Soma 1 ponto para cada célula marcada que não faz parte de uma combinação premiada
+  marcadas.forEach((marcada, index) => {
+    if (marcada && !usadas.has(index)) {
+      pontos += 1;
+    }
+  });
+
+  pontuacaoEl.textContent = `Pontos: ${pontos}`;
+}
+
 
   function resizeText(element) {
     let fontSize = 23;
@@ -325,23 +320,6 @@
 
   carregarDoLocalStorage();
   atualizarPontuacao();
-
-  // Ajuste automático de escala com base na altura da tela
-  function ajustarTamanhoCartela() {
-    const container = document.getElementById('container-cartela');
-    const fundo = document.getElementById('fundo');
-    
-    const maxLargura = 595;
-    const maxAltura = 842;
-
-    const alturaDisponivel = window.innerHeight - 40;
-    const escala = Math.min(1, alturaDisponivel / maxAltura);
-
-    fundo.style.transform = `scale(${escala})`;
-  }
-
-  window.addEventListener('resize', ajustarTamanhoCartela);
-  ajustarTamanhoCartela(); // Chama ao carregar
   </script>
 </body>
-</html>
+      </html>
