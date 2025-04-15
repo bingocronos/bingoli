@@ -34,10 +34,22 @@
       background-size: cover;
       background-position: center;
       display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      padding: 40px;
+      flex-direction: column;  /* Ajustado para garantir que as células e pontuação fiquem na parte inferior */
+      justify-content: flex-end;  /* Alinha tudo no fundo */
+      align-items: center;
+      padding: 20px 40px;  /* Ajuste no padding */
       box-sizing: border-box;
+    }
+    .pontuacao {
+      font-family: 'Tektur', sans-serif;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 10px; /* Ajuste para a pontuação não ficar grudada */
+      margin-right: 50px;
+      text-align: right;  /* Alinhado à direita */
+      width: 100%; /* Faz com que a pontuação ocupe toda a largura */
+      display: flex;
+      justify-content: flex-end;  /* Alinha a pontuação à direita */
     }
     .cartela {
       display: grid;
@@ -124,6 +136,9 @@
 <body>
   <div class="main-container">
     <div class="fundo-cartela" id="fundo">
+      <!-- A pontuação agora está no topo da cartela, alinhada à direita -->
+      <div class="pontuacao" id="pontuacao" style="font-size: 26px; font-weight: bold; color: #FF2A2B;">Pontos: 0</div>
+
       <div id="cartela" class="cartela">
         <div class="celula" contenteditable="true"></div>
         <div class="celula" contenteditable="true"></div>
@@ -136,6 +151,7 @@
         <div class="celula" contenteditable="true"></div>
       </div>
     </div>
+
     <div class="direita">
       <div class="botoes">
         <button onclick="baixarCartela()">Salvar Imagem</button>
@@ -164,6 +180,31 @@
   ];
 
   const celulas = document.querySelectorAll('.celula');
+  const pontuacaoEl = document.getElementById('pontuacao');
+
+  function atualizarPontuacao() {
+    let pontos = 0;
+    const marcadas = Array.from(celulas).map(c => c.classList.contains('marcada'));
+
+    // 1 ponto por quadrado
+    pontos += marcadas.filter(Boolean).length;
+
+    // Linhas e colunas (5 pontos)
+    for (let i = 0; i < 3; i++) {
+      const linha = marcadas.slice(i * 3, i * 3 + 3);
+      const coluna = [marcadas[i], marcadas[i + 3], marcadas[i + 6]];
+      if (linha.every(Boolean)) pontos += 5;
+      if (coluna.every(Boolean)) pontos += 5;
+    }
+
+    // Diagonais (7 pontos)
+    const diag1 = [marcadas[0], marcadas[4], marcadas[8]];
+    const diag2 = [marcadas[2], marcadas[4], marcadas[6]];
+    if (diag1.every(Boolean)) pontos += 7;
+    if (diag2.every(Boolean)) pontos += 7;
+
+    pontuacaoEl.textContent = `Pontos: ${pontos}`;
+  }
 
   function resizeText(element) {
     let fontSize = 23;
@@ -190,6 +231,7 @@
       if (textosSalvos && textosSalvos.length === celulas.length) {
         celulas.forEach((celula, index) => {
           celula.innerText = textosSalvos[index];
+          resizeText(celula);
         });
       } else {
         resetarCartela();
@@ -200,7 +242,7 @@
     }
   }
 
-  celulas.forEach((celula, index) => {
+  celulas.forEach((celula) => {
     celula.addEventListener('input', () => {
       resizeText(celula);
       salvarLocalmente();
@@ -208,41 +250,44 @@
 
     celula.addEventListener('dblclick', () => {
       celula.classList.toggle('marcada');
+      atualizarPontuacao();
     });
 
     resizeText(celula);
   });
 
-function baixarCartela() {
-  document.activeElement.blur();
-  const fundo = document.getElementById('fundo');
+  function baixarCartela() {
+    document.activeElement.blur();
+    const fundo = document.getElementById('fundo');
 
-  html2canvas(fundo, {
-    useCORS: true,
-    allowTaint: false,
-    backgroundColor: null,
-    imageTimeout: 0
-  }).then(canvas => {
-    const link = document.createElement('a');
-    link.download = 'cartela-bingo.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  }).catch(err => {
-    alert('Erro ao gerar a imagem. Tente novamente.');
-    console.error(err);
-  });
-}
+    html2canvas(fundo, {
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: null,
+      imageTimeout: 0
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'cartela-bingo.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }).catch(err => {
+      alert('Erro ao gerar a imagem. Tente novamente.');
+      console.error(err);
+    });
+  }
 
   function resetarCartela() {
     celulas.forEach((celula, index) => {
       celula.innerText = textosPadrao[index] || "";
       celula.classList.remove('marcada');
-      celula.style.fontSize = '23px';
+      resizeText(celula);
     });
     salvarLocalmente();
+    atualizarPontuacao();
   }
 
   carregarDoLocalStorage();
-</script>
+  atualizarPontuacao();
+  </script>
 </body>
 </html>
