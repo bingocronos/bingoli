@@ -152,18 +152,31 @@
       </div>
     </div>
 
-    <div class="direita">
-      <div class="botoes">
-        <button onclick="baixarCartela()">Salvar Imagem</button>
-        <button onclick="resetarCartela()">Resetar Cartela</button>
-      </div>
-      <div class="instrucoes">
-        <p>- Personalize como quiser a cartela</p>
-        <p>- Dê 2 cliques para marcar e desmarcar</p>
-        <p>- Aperte o botão de resetar pra voltar a cartela original</p>
+<div class="direita" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+  <div class="botoes">
+    <button onclick="baixarCartela()">Salvar Imagem</button>
+    <button onclick="resetarCartela()">Resetar Cartela</button>
+  </div>
+
+  <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
+    <!-- Instruções -->
+    <div class="instrucoes">
+      <p>- Personalize como quiser a cartela</p>
+      <p>- Dê 2 cliques para marcar e desmarcar</p>
+      <p>- Aperte o botão de resetar pra voltar a cartela original</p>
+    </div>
+
+    <!-- Pontuação -->
+    <div class="instrucoes" style="max-width: 280px;">
+      <p style="font-size: 24px; color: #FF2A2B; margin-bottom: 10px;">Pontuação:</p>
+      <div style="font-size: 20px; color: #FFFFFF; text-align: left; font-weight: bold;">
+        <p>Um quadrado: <span style="color: #FF2A2B;">+1 ponto</span></p>
+        <p>Linhas e colunas: <span style="color: #FF2A2B;">+5 pontos</span></p>
+        <p>Diagonal: <span style="color: #FF2A2B;">+10 pontos</span></p>
       </div>
     </div>
   </div>
+</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
