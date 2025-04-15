@@ -183,28 +183,50 @@
   const pontuacaoEl = document.getElementById('pontuacao');
 
   function atualizarPontuacao() {
-    let pontos = 0;
-    const marcadas = Array.from(celulas).map(c => c.classList.contains('marcada'));
+  let pontos = 0;
+  const marcadas = Array.from(celulas).map(c => c.classList.contains('marcada'));
+  const usadas = new Set(); // para armazenar os índices das células que fazem parte de combinações premiadas
 
-    // 1 ponto por quadrado
-    pontos += marcadas.filter(Boolean).length;
+  // Linhas e colunas (5 pontos)
+  for (let i = 0; i < 3; i++) {
+    const linhaIndices = [i * 3, i * 3 + 1, i * 3 + 2];
+    const colunaIndices = [i, i + 3, i + 6];
 
-    // Linhas e colunas (5 pontos)
-    for (let i = 0; i < 3; i++) {
-      const linha = marcadas.slice(i * 3, i * 3 + 3);
-      const coluna = [marcadas[i], marcadas[i + 3], marcadas[i + 6]];
-      if (linha.every(Boolean)) pontos += 5;
-      if (coluna.every(Boolean)) pontos += 5;
+    if (linhaIndices.every(index => marcadas[index])) {
+      pontos += 5;
+      linhaIndices.forEach(index => usadas.add(index));
     }
 
-    // Diagonais (7 pontos)
-    const diag1 = [marcadas[0], marcadas[4], marcadas[8]];
-    const diag2 = [marcadas[2], marcadas[4], marcadas[6]];
-    if (diag1.every(Boolean)) pontos += 7;
-    if (diag2.every(Boolean)) pontos += 7;
-
-    pontuacaoEl.textContent = `Pontos: ${pontos}`;
+    if (colunaIndices.every(index => marcadas[index])) {
+      pontos += 5;
+      colunaIndices.forEach(index => usadas.add(index));
+    }
   }
+
+  // Diagonais (10 pontos)
+  const diag1 = [0, 4, 8];
+  const diag2 = [2, 4, 6];
+
+  if (diag1.every(index => marcadas[index])) {
+    pontos += 10;
+    diag1.forEach(index => usadas.add(index));
+  }
+
+  if (diag2.every(index => marcadas[index])) {
+    pontos += 10;
+    diag2.forEach(index => usadas.add(index));
+  }
+
+  // Soma 1 ponto para cada célula marcada que não faz parte de uma combinação premiada
+  marcadas.forEach((marcada, index) => {
+    if (marcada && !usadas.has(index)) {
+      pontos += 1;
+    }
+  });
+
+  pontuacaoEl.textContent = `Pontos: ${pontos}`;
+}
+
 
   function resizeText(element) {
     let fontSize = 23;
@@ -290,4 +312,4 @@
   atualizarPontuacao();
   </script>
 </body>
-</html>
+      </html>
